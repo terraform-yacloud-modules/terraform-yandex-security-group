@@ -38,16 +38,17 @@ variable "vpc_id" {
 variable "ingress_rules" {
   description = "Ingress rules"
   type        = map(object({
-    protocol          = string
-    description       = optional(string)
-    labels            = optional(any)
-    from_port         = optional(number)
-    to_port           = optional(number)
-    port              = optional(number)
-    security_group_id = optional(string)
-    predefined_target = optional(string)
-    v4_cidr_blocks    = optional(list(string))
-    v6_cidr_blocks    = optional(list(string))
+    protocol            = string
+    description         = optional(string)
+    labels              = optional(any)
+    from_port           = optional(number)
+    to_port             = optional(number)
+    port                = optional(number)
+    security_group_name = optional(string)
+    security_group_id   = optional(string)
+    predefined_target   = optional(string)
+    v4_cidr_blocks      = optional(list(string))
+    v6_cidr_blocks      = optional(list(string))
   }))
 
   default = {}
@@ -56,16 +57,17 @@ variable "ingress_rules" {
 variable "egress_rules" {
   description = "Egress rules"
   type        = map(object({
-    protocol          = string
-    description       = optional(string)
-    labels            = optional(any)
-    from_port         = optional(number)
-    to_port           = optional(number)
-    port              = optional(number)
-    security_group_id = optional(string)
-    predefined_target = optional(string)
-    v4_cidr_blocks    = optional(list(string))
-    v6_cidr_blocks    = optional(list(string))
+    protocol            = string
+    description         = optional(string)
+    labels              = optional(any)
+    from_port           = optional(number)
+    to_port             = optional(number)
+    port                = optional(number)
+    security_group_name = optional(string)
+    security_group_id   = optional(string)
+    predefined_target   = optional(string)
+    v4_cidr_blocks      = optional(list(string))
+    v6_cidr_blocks      = optional(list(string))
   }))
   default = {}
 }
