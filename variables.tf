@@ -37,7 +37,7 @@ variable "vpc_id" {
 
 variable "ingress_rules" {
   description = "Ingress rules"
-  type        = map(object({
+  type = map(object({
     protocol            = string
     description         = optional(string)
     labels              = optional(any)
@@ -56,7 +56,7 @@ variable "ingress_rules" {
 
 variable "egress_rules" {
   description = "Egress rules"
-  type        = map(object({
+  type = map(object({
     protocol            = string
     description         = optional(string)
     labels              = optional(any)
