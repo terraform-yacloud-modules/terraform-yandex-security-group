@@ -33,7 +33,7 @@ module "sg" {
 
   ingress_rules = {
     "rule1" = {
-      protocol       = "tcp"
+      protocol       = "TCP"
       description    = "Allow TCP traffic from 0.0.0.0/0"
       from_port      = 0
       to_port        = 65535
