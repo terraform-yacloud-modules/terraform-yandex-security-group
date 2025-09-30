@@ -36,7 +36,7 @@ variable "vpc_id" {
 }
 
 variable "ingress_rules" {
-  description = "Ingress rules"
+  description = "A map of ingress (inbound) rules for the security group. Each rule defines what traffic is allowed to enter the security group."
   type = map(object({
     protocol            = string
     description         = optional(string)
@@ -55,7 +55,7 @@ variable "ingress_rules" {
 }
 
 variable "egress_rules" {
-  description = "Egress rules"
+  description = "A map of egress (outbound) rules for the security group. Each rule defines what traffic is allowed to leave the security group."
   type = map(object({
     protocol            = string
     description         = optional(string)
