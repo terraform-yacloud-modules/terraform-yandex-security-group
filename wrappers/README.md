@@ -10,7 +10,7 @@ This wrapper does not implement any extra functionality. It just calls the modul
 
 ### Usage with Terragrunt
 
-`terragrunt.hcl`: 
+`terragrunt.hcl`:
 ```hcl
 terraform {
   source = "git::https://github.com/terraform-yacloud-modules/terraform-yandex-security-group//wrappers.git?ref=main"
@@ -63,11 +63,11 @@ inputs = {
 ```hcl
 module "security-groups" {
   source = "git::https://github.com/terraform-yacloud-modules/terraform-yandex-security-group//wrappers"
-  
+
   defaults = {
     vpc_id = "vpc-1234567890abcdef0"
   }
-  
+
   items = {
     web = {
       description = "Web security group"
