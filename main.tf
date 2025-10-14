@@ -4,6 +4,17 @@ resource "yandex_vpc_security_group" "main" {
   folder_id   = var.folder_id
   labels      = var.labels
   network_id  = var.vpc_id
+
+
+  dynamic "timeouts" {
+    for_each = var.timeouts == null ? [] : [var.timeouts]
+    content {
+      create = try(timeouts.value.create, null)
+      update = try(timeouts.value.update, null)
+      delete = try(timeouts.value.delete, null)
+    }
+  }
+
 }
 
 resource "yandex_vpc_security_group_rule" "ingress" {
@@ -21,6 +32,17 @@ resource "yandex_vpc_security_group_rule" "ingress" {
   predefined_target      = each.value["predefined_target"]
   v4_cidr_blocks         = each.value["v4_cidr_blocks"]
   v6_cidr_blocks         = each.value["v6_cidr_blocks"]
+
+
+  dynamic "timeouts" {
+    for_each = var.timeouts == null ? [] : [var.timeouts]
+    content {
+      create = try(timeouts.value.create, null)
+      update = try(timeouts.value.update, null)
+      delete = try(timeouts.value.delete, null)
+    }
+  }
+
 }
 
 resource "yandex_vpc_security_group_rule" "egress" {
@@ -38,4 +60,15 @@ resource "yandex_vpc_security_group_rule" "egress" {
   predefined_target      = each.value["predefined_target"]
   v4_cidr_blocks         = each.value["v4_cidr_blocks"]
   v6_cidr_blocks         = each.value["v6_cidr_blocks"]
+
+
+  dynamic "timeouts" {
+    for_each = var.timeouts == null ? [] : [var.timeouts]
+    content {
+      create = try(timeouts.value.create, null)
+      update = try(timeouts.value.update, null)
+      delete = try(timeouts.value.delete, null)
+    }
+  }
+
 }

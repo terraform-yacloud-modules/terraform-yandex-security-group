@@ -11,7 +11,7 @@ terraform plan
 terraform apply
 ```
 
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
@@ -48,7 +48,7 @@ No inputs.
 |------|-------------|
 | <a name="output_id"></a> [id](#output\_id) | Security group ID |
 | <a name="output_name"></a> [name](#output\_name) | Security group name |
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- END_TF_DOCS -->
 
 ## License
 

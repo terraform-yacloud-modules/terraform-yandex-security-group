@@ -40,4 +40,11 @@ module "sg" {
       v4_cidr_blocks = ["0.0.0.0/0"]
     }
   }
+
+  timeouts = {
+    create = "30m"
+    update = "30m"
+    delete = "30m"
+  }
+
 }
