@@ -40,7 +40,7 @@ variable "ingress_rules" {
   type = map(object({
     protocol            = string
     description         = optional(string)
-    labels              = optional(any)
+    labels              = optional(map(string))
     from_port           = optional(number)
     to_port             = optional(number)
     port                = optional(number)
@@ -59,7 +59,7 @@ variable "egress_rules" {
   type = map(object({
     protocol            = string
     description         = optional(string)
-    labels              = optional(any)
+    labels              = optional(map(string))
     from_port           = optional(number)
     to_port             = optional(number)
     port                = optional(number)
