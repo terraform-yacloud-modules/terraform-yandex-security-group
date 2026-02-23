@@ -1,3 +1,8 @@
+## v1.38.0 - 2026-02-23
+### Miscellaneous
+- e186794 Merge pull request [#96](https://github.com/terraform-yacloud-modules/terraform-yandex-security-group/pull/96) from terraform-yacloud-modules/dependabot/github_actions/kvendingoldo/git-flow-action-2.16.0
+- d4e632c build(deps): bump kvendingoldo/git-flow-action from 2.2.0 to 2.16.0
+
 ## v1.37.0
 ## v1.36.0
 ## v1.35.0
