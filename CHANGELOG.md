@@ -1,3 +1,8 @@
+## v1.39.0 - 2026-03-02
+### Miscellaneous
+- 3dcca22 Merge pull request [#97](https://github.com/terraform-yacloud-modules/terraform-yandex-security-group/pull/97) from terraform-yacloud-modules/dependabot/github_actions/hashicorp/setup-terraform-4
+- c541e76 build(deps): bump hashicorp/setup-terraform from 3 to 4
+
 ## v1.38.0 - 2026-02-23
 ### Miscellaneous
 - e186794 Merge pull request [#96](https://github.com/terraform-yacloud-modules/terraform-yandex-security-group/pull/96) from terraform-yacloud-modules/dependabot/github_actions/kvendingoldo/git-flow-action-2.16.0
