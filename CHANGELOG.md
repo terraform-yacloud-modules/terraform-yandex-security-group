@@ -1,3 +1,7 @@
+## v1.40.0 - 2026-03-11
+### Bug Fixes
+- 00b52a0 fix: use try in variables validation blocks ([#94](https://github.com/terraform-yacloud-modules/terraform-yandex-security-group/pull/94))
+
 ## v1.39.0 - 2026-03-02
 ### Miscellaneous
 - 3dcca22 Merge pull request [#97](https://github.com/terraform-yacloud-modules/terraform-yandex-security-group/pull/97) from terraform-yacloud-modules/dependabot/github_actions/hashicorp/setup-terraform-4
