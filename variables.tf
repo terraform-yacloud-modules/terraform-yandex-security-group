@@ -56,10 +56,10 @@ variable "ingress_rules" {
   validation {
     condition = alltrue([
       for rule_key, rule in var.ingress_rules :
-      (rule.port == null || (rule.port >= -1 && rule.port <= 65535)) &&
-      (rule.from_port == null || (rule.from_port >= -1 && rule.from_port <= 65535)) &&
-      (rule.to_port == null || (rule.to_port >= -1 && rule.to_port <= 65535)) &&
-      (rule.from_port == null || rule.to_port == null || rule.from_port <= rule.to_port) &&
+      try(rule.port >= -1 && rule.port <= 65535, true) &&
+      try(rule.from_port >= -1 && rule.from_port <= 65535, true) &&
+      try(rule.to_port >= -1 && rule.to_port <= 65535, true) &&
+      try(rule.from_port <= rule.to_port, true) &&
       (rule.port == null || (rule.from_port == null && rule.to_port == null)) &&
       (rule.from_port == null || rule.port == null) &&
       (rule.to_port == null || rule.port == null) &&
@@ -92,10 +92,10 @@ variable "egress_rules" {
   validation {
     condition = alltrue([
       for rule_key, rule in var.egress_rules :
-      (rule.port == null || (rule.port >= -1 && rule.port <= 65535)) &&
-      (rule.from_port == null || (rule.from_port >= -1 && rule.from_port <= 65535)) &&
-      (rule.to_port == null || (rule.to_port >= -1 && rule.to_port <= 65535)) &&
-      (rule.from_port == null || rule.to_port == null || rule.from_port <= rule.to_port) &&
+      try(rule.port >= -1 && rule.port <= 65535, true) &&
+      try(rule.from_port >= -1 && rule.from_port <= 65535, true) &&
+      try(rule.to_port >= -1 && rule.to_port <= 65535, true) &&
+      try(rule.from_port <= rule.to_port, true) &&
       (rule.port == null || (rule.from_port == null && rule.to_port == null)) &&
       (rule.from_port == null || rule.port == null) &&
       (rule.to_port == null || rule.port == null) &&
