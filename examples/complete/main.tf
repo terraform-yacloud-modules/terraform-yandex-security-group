@@ -1,9 +1,12 @@
 data "yandex_client_config" "client" {}
 
+provider "yandex" {
+}
+
 module "network" {
   source = "git::https://github.com/terraform-yacloud-modules/terraform-yandex-vpc.git?ref=v1.0.0"
 
-  folder_id = data.yandex_client_config.client.folder_id
+  folder_id = coalesce(var.folder_id, data.yandex_client_config.client.folder_id)
 
   blank_name = "vpc-complete-example"
   labels = {
@@ -22,7 +25,7 @@ module "network" {
 module "sg" {
   source = "../../"
 
-  folder_id   = data.yandex_client_config.client.folder_id
+  folder_id   = coalesce(var.folder_id, data.yandex_client_config.client.folder_id)
   vpc_id      = module.network.vpc_id
   blank_name  = "complete-security-group"
   description = "Complete security group example with all parameters"
