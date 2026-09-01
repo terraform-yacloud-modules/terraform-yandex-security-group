@@ -1,3 +1,10 @@
+## v1.42.0 - 2026-09-01
+### Bug Fixes
+- d6ba8eb fix: передача folder_id в примере с приоритетом tfvars над YC_FOLDER_ID
+
+### Miscellaneous
+- 8f5e97a Merge pull request [#100](https://github.com/terraform-yacloud-modules/terraform-yandex-security-group/pull/100) from terraform-yacloud-modules/feature/add-folder-id-tfvars
+
 ## v1.41.0 - 2026-09-01
 ### Miscellaneous
 - d5b3b7b build(deps): bump actions/cache from 5.0.3 to 5.0.5 ([#99](https://github.com/terraform-yacloud-modules/terraform-yandex-security-group/pull/99))
