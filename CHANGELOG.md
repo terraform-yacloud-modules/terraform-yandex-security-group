@@ -1,3 +1,7 @@
+## v1.41.0 - 2026-09-01
+### Miscellaneous
+- d5b3b7b build(deps): bump actions/cache from 5.0.3 to 5.0.5 ([#99](https://github.com/terraform-yacloud-modules/terraform-yandex-security-group/pull/99))
+
 ## v1.40.0 - 2026-03-11
 ### Bug Fixes
 - 00b52a0 fix: use try in variables validation blocks ([#94](https://github.com/terraform-yacloud-modules/terraform-yandex-security-group/pull/94))
