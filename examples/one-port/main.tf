@@ -13,7 +13,7 @@ module "network" {
     repo = "terraform-yacloud-modules/terraform-yandex-vpc"
   }
 
-  azs = ["ru-central1-a", "ru-central1-b", "ru-central1-d"]
+  azs = ["ru-central1-a", "ru-central1-e", "ru-central1-d"]
 
   private_subnets = [["10.4.0.0/24"]]
 

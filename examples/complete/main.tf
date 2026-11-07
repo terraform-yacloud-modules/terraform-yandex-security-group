@@ -14,7 +14,7 @@ module "network" {
     env  = "complete-example"
   }
 
-  azs = ["ru-central1-a", "ru-central1-b", "ru-central1-d"]
+  azs = ["ru-central1-a", "ru-central1-e", "ru-central1-d"]
 
   private_subnets = [["10.5.0.0/24"]]
 
@@ -41,6 +41,10 @@ module "sg" {
       description    = "Allow SSH access from specific IP range"
       port           = 22
       v4_cidr_blocks = ["192.168.1.0/24"]
+      labels = {
+        managed_by = "terraform"
+        purpose    = "ssh"
+      }
     },
     "http" = {
       protocol       = "TCP"
@@ -60,6 +64,11 @@ module "sg" {
       from_port      = 8000
       to_port        = 9000
       v4_cidr_blocks = ["10.0.0.0/8"]
+    },
+    "nlb-healthchecks" = {
+      protocol          = "TCP"
+      description       = "Allow load balancer health check nodes"
+      predefined_target = "loadbalancer_healthchecks"
     }
   }
 
@@ -81,5 +90,45 @@ module "sg" {
     create = "15m"
     update = "10m"
     delete = "5m"
+  }
+}
+
+module "default_sg" {
+  source = "../../"
+
+  folder_id                     = coalesce(var.folder_id, data.yandex_client_config.client.folder_id)
+  vpc_id                        = module.network.vpc_id
+  manage_default_security_group = true
+  description                   = "Default security group managed by the module"
+  labels = {
+    "environment" = "test"
+    "project"     = "terraform-module"
+    "team"        = "devops"
+  }
+
+  ingress_rules = {
+    "internal-icmp" = {
+      protocol       = "ICMP"
+      description    = "Allow ICMP from the internal network"
+      v4_cidr_blocks = ["10.0.0.0/8"]
+    },
+    "internal-ssh" = {
+      protocol          = "TCP"
+      description       = "Allow traffic between members of the default security group"
+      port              = 22
+      predefined_target = "self_security_group"
+      labels = {
+        managed_by = "terraform"
+        purpose    = "ssh"
+      }
+    }
+  }
+
+  egress_rules = {
+    "all-outbound" = {
+      protocol       = "ANY"
+      description    = "Allow all outbound traffic"
+      v4_cidr_blocks = ["0.0.0.0/0"]
+    }
   }
 }
