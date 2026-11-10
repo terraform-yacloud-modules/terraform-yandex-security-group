@@ -11,8 +11,9 @@ variable "folder_id" {
 # naming
 #
 variable "blank_name" {
-  description = "Blank name which will be used for all resources"
+  description = "Blank name which will be used for the created security group. Ignored when manage_default_security_group is true."
   type        = string
+  default     = null
 }
 
 variable "description" {
@@ -33,6 +34,12 @@ variable "labels" {
 variable "vpc_id" {
   description = "VPC ID"
   type        = string
+}
+
+variable "manage_default_security_group" {
+  description = "Manage the network's default security group instead of creating a dedicated security group. Ingress and egress rules are applied inline to the default security group."
+  type        = bool
+  default     = false
 }
 
 variable "ingress_rules" {
@@ -63,9 +70,9 @@ variable "ingress_rules" {
       (rule.port == null || (rule.from_port == null && rule.to_port == null)) &&
       (rule.from_port == null || rule.port == null) &&
       (rule.to_port == null || rule.port == null) &&
-      (rule.v4_cidr_blocks == null || length(rule.v4_cidr_blocks) == 0 || alltrue([
+      try(alltrue([
         for cidr in rule.v4_cidr_blocks : can(cidrhost(cidr, 0))
-      ])) &&
+      ]), true) &&
       contains(["TCP", "UDP", "ICMP", "ANY", "IPV6-ICMP"], rule.protocol)
     ])
     error_message = "Invalid ingress rule configuration. Check port ranges, CIDR blocks, and protocol values."
@@ -99,9 +106,9 @@ variable "egress_rules" {
       (rule.port == null || (rule.from_port == null && rule.to_port == null)) &&
       (rule.from_port == null || rule.port == null) &&
       (rule.to_port == null || rule.port == null) &&
-      (rule.v4_cidr_blocks == null || length(rule.v4_cidr_blocks) == 0 || alltrue([
+      try(alltrue([
         for cidr in rule.v4_cidr_blocks : can(cidrhost(cidr, 0))
-      ])) &&
+      ]), true) &&
       contains(["TCP", "UDP", "ICMP", "ANY", "IPV6-ICMP"], rule.protocol)
     ])
     error_message = "Invalid egress rule configuration. Check port ranges, CIDR blocks, and protocol values."
