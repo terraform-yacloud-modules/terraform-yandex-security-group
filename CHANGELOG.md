@@ -1,3 +1,7 @@
+## v1.45.0 - 2026-11-10
+### Features
+- 23f39b9 feat: add default security group management ([#103](https://github.com/terraform-yacloud-modules/terraform-yandex-security-group/pull/103))
+
 ## v1.44.0 - 2026-11-07
 ### Miscellaneous
 - 2ddf635 build(deps): bump actions/checkout from 6 to 7 ([#102](https://github.com/terraform-yacloud-modules/terraform-yandex-security-group/pull/102))
