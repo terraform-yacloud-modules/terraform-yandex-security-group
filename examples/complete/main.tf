@@ -132,3 +132,67 @@ module "default_sg" {
     }
   }
 }
+
+# Security group created outside the module. The module manages only its rules.
+resource "yandex_vpc_security_group" "existing" {
+  name        = "pre-existing-security-group"
+  description = "Security group created outside the module"
+  folder_id   = coalesce(var.folder_id, data.yandex_client_config.client.folder_id)
+  network_id  = module.network.vpc_id
+
+  labels = {
+    "environment" = "test"
+    "project"     = "terraform-module"
+  }
+}
+
+# Rules of the existing group are attached by its ID.
+module "existing_sg_by_id" {
+  source = "../../"
+
+  folder_id                      = coalesce(var.folder_id, data.yandex_client_config.client.folder_id)
+  manage_existing_security_group = true
+  existing_security_group_id     = yandex_vpc_security_group.existing.id
+
+  ingress_rules = {
+    "internal-https" = {
+      protocol       = "TCP"
+      description    = "Allow HTTPS from the internal network"
+      port           = 443
+      v4_cidr_blocks = ["10.0.0.0/8"]
+      labels = {
+        managed_by = "terraform"
+        purpose    = "https"
+      }
+    }
+  }
+
+  egress_rules = {
+    "internal-dns" = {
+      protocol       = "UDP"
+      description    = "Allow DNS queries to the internal resolvers"
+      port           = 53
+      v4_cidr_blocks = ["10.0.0.0/8"]
+    }
+  }
+}
+
+# Rules of the existing group can also be attached by its name.
+module "existing_sg_by_name" {
+  source = "../../"
+
+  folder_id                      = coalesce(var.folder_id, data.yandex_client_config.client.folder_id)
+  manage_existing_security_group = true
+  existing_security_group_name   = yandex_vpc_security_group.existing.name
+
+  ingress_rules = {
+    "internal-mysql" = {
+      protocol       = "TCP"
+      description    = "Allow MySQL from the internal network"
+      port           = 3306
+      v4_cidr_blocks = ["10.0.0.0/8"]
+    }
+  }
+
+  depends_on = [yandex_vpc_security_group.existing]
+}
