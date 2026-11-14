@@ -1,10 +1,21 @@
 locals {
-  manage_default_security_group = var.manage_default_security_group
-  security_group_id             = local.manage_default_security_group ? yandex_vpc_default_security_group.main[0].id : yandex_vpc_security_group.main[0].id
+  manage_default_security_group  = var.manage_default_security_group
+  manage_existing_security_group = var.manage_existing_security_group
+  create_security_group          = !local.manage_default_security_group && !local.manage_existing_security_group
+
+  existing_security_group = local.manage_existing_security_group ? data.yandex_vpc_security_group.existing[0] : null
+
+  security_group = (
+    local.manage_default_security_group ? yandex_vpc_default_security_group.main[0] :
+    local.manage_existing_security_group ? local.existing_security_group :
+    yandex_vpc_security_group.main[0]
+  )
+
+  security_group_id = local.security_group.id
 }
 
 resource "yandex_vpc_security_group" "main" {
-  count = local.manage_default_security_group ? 0 : 1
+  count = local.create_security_group ? 1 : 0
 
   name        = var.blank_name
   description = var.description
@@ -19,6 +30,13 @@ resource "yandex_vpc_security_group" "main" {
       create = try(timeouts.value.create, null)
       update = try(timeouts.value.update, null)
       delete = try(timeouts.value.delete, null)
+    }
+  }
+
+  lifecycle {
+    precondition {
+      condition     = var.vpc_id != null
+      error_message = "vpc_id must be set when the module creates a security group. Set existing_security_group_id or existing_security_group_name to manage rules of an existing group instead."
     }
   }
 
@@ -69,6 +87,13 @@ resource "yandex_vpc_default_security_group" "main" {
       create = try(timeouts.value.create, null)
       update = try(timeouts.value.update, null)
       delete = try(timeouts.value.delete, null)
+    }
+  }
+
+  lifecycle {
+    precondition {
+      condition     = var.vpc_id != null
+      error_message = "vpc_id must be set when the module manages the default security group."
     }
   }
 

@@ -5,56 +5,56 @@ output "id" {
 
 output "name" {
   description = "Security group name"
-  value       = local.manage_default_security_group ? yandex_vpc_default_security_group.main[0].name : yandex_vpc_security_group.main[0].name
+  value       = local.security_group.name
 }
 
 output "description" {
   description = "Security group description"
-  value       = local.manage_default_security_group ? yandex_vpc_default_security_group.main[0].description : yandex_vpc_security_group.main[0].description
+  value       = local.security_group.description
 }
 
 output "folder_id" {
   description = "Folder ID where security group is located"
-  value       = local.manage_default_security_group ? yandex_vpc_default_security_group.main[0].folder_id : yandex_vpc_security_group.main[0].folder_id
+  value       = local.security_group.folder_id
 }
 
 output "network_id" {
   description = "Network ID where security group is located"
-  value       = local.manage_default_security_group ? yandex_vpc_default_security_group.main[0].network_id : yandex_vpc_security_group.main[0].network_id
+  value       = local.security_group.network_id
 }
 
 output "labels" {
   description = "Security group labels"
-  value       = local.manage_default_security_group ? yandex_vpc_default_security_group.main[0].labels : yandex_vpc_security_group.main[0].labels
+  value       = local.security_group.labels
 }
 
 output "created_at" {
   description = "Security group creation timestamp"
-  value       = local.manage_default_security_group ? yandex_vpc_default_security_group.main[0].created_at : yandex_vpc_security_group.main[0].created_at
+  value       = local.security_group.created_at
 }
 
 output "status" {
   description = "Security group status"
-  value       = local.manage_default_security_group ? yandex_vpc_default_security_group.main[0].status : yandex_vpc_security_group.main[0].status
+  value       = local.security_group.status
 }
 
 output "default_security_group_id" {
-  description = "ID of the managed default security group. Null when the module creates a dedicated security group."
+  description = "ID of the managed default security group. Null when the module creates a dedicated security group or manages rules of an existing group."
   value       = try(yandex_vpc_default_security_group.main[0].id, null)
 }
 
 output "default_security_group_name" {
-  description = "Name of the managed default security group. Null when the module creates a dedicated security group."
+  description = "Name of the managed default security group. Null when the module creates a dedicated security group or manages rules of an existing group."
   value       = try(yandex_vpc_default_security_group.main[0].name, null)
 }
 
 output "default_security_group_ingress_rules" {
-  description = "Ingress rules of the managed default security group. Null when the module creates a dedicated security group."
+  description = "Ingress rules of the managed default security group. Null when the module creates a dedicated security group or manages rules of an existing group."
   value       = try(yandex_vpc_default_security_group.main[0].ingress, null)
 }
 
 output "default_security_group_egress_rules" {
-  description = "Egress rules of the managed default security group. Null when the module creates a dedicated security group."
+  description = "Egress rules of the managed default security group. Null when the module creates a dedicated security group or manages rules of an existing group."
   value       = try(yandex_vpc_default_security_group.main[0].egress, null)
 }
 
