@@ -1,3 +1,7 @@
+## v1.46.0 - 2026-11-14
+### Features
+- c9fa471 feat: manage rules of existing security groups ([#104](https://github.com/terraform-yacloud-modules/terraform-yandex-security-group/pull/104))
+
 ## v1.45.0 - 2026-11-10
 ### Features
 - 23f39b9 feat: add default security group management ([#103](https://github.com/terraform-yacloud-modules/terraform-yandex-security-group/pull/103))
