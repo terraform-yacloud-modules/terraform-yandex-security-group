@@ -37,31 +37,35 @@ No modules.
 | [yandex_vpc_security_group_rule.egress](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/vpc_security_group_rule) | resource |
 | [yandex_vpc_security_group_rule.ingress](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/vpc_security_group_rule) | resource |
 | [yandex_vpc_security_group.egress](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/data-sources/vpc_security_group) | data source |
+| [yandex_vpc_security_group.existing](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/data-sources/vpc_security_group) | data source |
 | [yandex_vpc_security_group.ingress](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/data-sources/vpc_security_group) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_blank_name"></a> [blank\_name](#input\_blank\_name) | Blank name which will be used for the created security group. Ignored when manage\_default\_security\_group is true. | `string` | `null` | no |
-| <a name="input_description"></a> [description](#input\_description) | Description of the security group | `string` | `""` | no |
+| <a name="input_blank_name"></a> [blank\_name](#input\_blank\_name) | Blank name which will be used for the created security group. Ignored when manage\_default\_security\_group or manage\_existing\_security\_group is true. | `string` | `null` | no |
+| <a name="input_description"></a> [description](#input\_description) | Description of the security group. Ignored when manage\_existing\_security\_group is true. | `string` | `""` | no |
 | <a name="input_egress_rules"></a> [egress\_rules](#input\_egress\_rules) | A map of egress (outbound) rules for the security group. Each rule defines what traffic is allowed to leave the security group. | <pre>map(object({<br/>    protocol            = string<br/>    description         = optional(string)<br/>    labels              = optional(map(string))<br/>    from_port           = optional(number)<br/>    to_port             = optional(number)<br/>    port                = optional(number)<br/>    security_group_name = optional(string)<br/>    security_group_id   = optional(string)<br/>    predefined_target   = optional(string)<br/>    v4_cidr_blocks      = optional(list(string))<br/>    v6_cidr_blocks      = optional(list(string))<br/>  }))</pre> | `{}` | no |
+| <a name="input_existing_security_group_id"></a> [existing\_security\_group\_id](#input\_existing\_security\_group\_id) | ID of an existing security group to manage ingress and egress rules for. Used when manage\_existing\_security\_group is true and takes precedence over existing\_security\_group\_name. Mutually exclusive with manage\_default\_security\_group. | `string` | `null` | no |
+| <a name="input_existing_security_group_name"></a> [existing\_security\_group\_name](#input\_existing\_security\_group\_name) | Name of an existing security group to manage ingress and egress rules for. The group is looked up in folder\_id. Used when manage\_existing\_security\_group is true and existing\_security\_group\_id is null. Mutually exclusive with manage\_default\_security\_group. | `string` | `null` | no |
 | <a name="input_folder_id"></a> [folder\_id](#input\_folder\_id) | Folder ID | `string` | `null` | no |
 | <a name="input_ingress_rules"></a> [ingress\_rules](#input\_ingress\_rules) | A map of ingress (inbound) rules for the security group. Each rule defines what traffic is allowed to enter the security group. | <pre>map(object({<br/>    protocol            = string<br/>    description         = optional(string)<br/>    labels              = optional(map(string))<br/>    from_port           = optional(number)<br/>    to_port             = optional(number)<br/>    port                = optional(number)<br/>    security_group_name = optional(string)<br/>    security_group_id   = optional(string)<br/>    predefined_target   = optional(string)<br/>    v4_cidr_blocks      = optional(list(string))<br/>    v6_cidr_blocks      = optional(list(string))<br/>  }))</pre> | `{}` | no |
-| <a name="input_labels"></a> [labels](#input\_labels) | A set of labels | `map(string)` | `{}` | no |
+| <a name="input_labels"></a> [labels](#input\_labels) | A set of labels. Ignored when manage\_existing\_security\_group is true. | `map(string)` | `{}` | no |
 | <a name="input_manage_default_security_group"></a> [manage\_default\_security\_group](#input\_manage\_default\_security\_group) | Manage the network's default security group instead of creating a dedicated security group. Ingress and egress rules are applied inline to the default security group. | `bool` | `false` | no |
+| <a name="input_manage_existing_security_group"></a> [manage\_existing\_security\_group](#input\_manage\_existing\_security\_group) | Manage ingress and egress rules of an existing security group instead of creating a dedicated security group. Set existing\_security\_group\_id or existing\_security\_group\_name to select the group. The module does not change the group's description or labels. | `bool` | `false` | no |
 | <a name="input_timeouts"></a> [timeouts](#input\_timeouts) | Timeout settings for cluster operations | <pre>object({<br/>    create = optional(string)<br/>    update = optional(string)<br/>    delete = optional(string)<br/>  })</pre> | `null` | no |
-| <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | VPC ID | `string` | n/a | yes |
+| <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | VPC ID. Required unless existing\_security\_group\_id or existing\_security\_group\_name is set. | `string` | `null` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
 | <a name="output_created_at"></a> [created\_at](#output\_created\_at) | Security group creation timestamp |
-| <a name="output_default_security_group_egress_rules"></a> [default\_security\_group\_egress\_rules](#output\_default\_security\_group\_egress\_rules) | Egress rules of the managed default security group. Null when the module creates a dedicated security group. |
-| <a name="output_default_security_group_id"></a> [default\_security\_group\_id](#output\_default\_security\_group\_id) | ID of the managed default security group. Null when the module creates a dedicated security group. |
-| <a name="output_default_security_group_ingress_rules"></a> [default\_security\_group\_ingress\_rules](#output\_default\_security\_group\_ingress\_rules) | Ingress rules of the managed default security group. Null when the module creates a dedicated security group. |
-| <a name="output_default_security_group_name"></a> [default\_security\_group\_name](#output\_default\_security\_group\_name) | Name of the managed default security group. Null when the module creates a dedicated security group. |
+| <a name="output_default_security_group_egress_rules"></a> [default\_security\_group\_egress\_rules](#output\_default\_security\_group\_egress\_rules) | Egress rules of the managed default security group. Null when the module creates a dedicated security group or manages rules of an existing group. |
+| <a name="output_default_security_group_id"></a> [default\_security\_group\_id](#output\_default\_security\_group\_id) | ID of the managed default security group. Null when the module creates a dedicated security group or manages rules of an existing group. |
+| <a name="output_default_security_group_ingress_rules"></a> [default\_security\_group\_ingress\_rules](#output\_default\_security\_group\_ingress\_rules) | Ingress rules of the managed default security group. Null when the module creates a dedicated security group or manages rules of an existing group. |
+| <a name="output_default_security_group_name"></a> [default\_security\_group\_name](#output\_default\_security\_group\_name) | Name of the managed default security group. Null when the module creates a dedicated security group or manages rules of an existing group. |
 | <a name="output_description"></a> [description](#output\_description) | Security group description |
 | <a name="output_egress_rules"></a> [egress\_rules](#output\_egress\_rules) | Map of egress rules with their IDs |
 | <a name="output_folder_id"></a> [folder\_id](#output\_folder\_id) | Folder ID where security group is located |
