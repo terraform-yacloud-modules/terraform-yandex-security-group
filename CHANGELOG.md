@@ -1,3 +1,7 @@
+## v1.47.0 - 2026-11-18
+### Miscellaneous
+- 262a44b ci: run semver job only on push to main ([#105](https://github.com/terraform-yacloud-modules/terraform-yandex-security-group/pull/105))
+
 ## v1.46.0 - 2026-11-14
 ### Features
 - c9fa471 feat: manage rules of existing security groups ([#104](https://github.com/terraform-yacloud-modules/terraform-yandex-security-group/pull/104))
