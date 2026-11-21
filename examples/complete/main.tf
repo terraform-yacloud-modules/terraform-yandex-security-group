@@ -196,3 +196,86 @@ module "existing_sg_by_name" {
 
   depends_on = [yandex_vpc_security_group.existing]
 }
+
+# Several security groups with their own rules created by a single module call.
+module "multi_sg" {
+  source = "../../"
+
+  folder_id = coalesce(var.folder_id, data.yandex_client_config.client.folder_id)
+  vpc_id    = module.network.vpc_id
+
+  security_groups = {
+    "frontend" = {
+      name        = "multi-frontend-security-group"
+      description = "Frontend security group created together with the backend group"
+      labels = {
+        tier = "frontend"
+      }
+
+      ingress_rules = {
+        "http" = {
+          protocol       = "TCP"
+          description    = "Allow HTTP traffic from anywhere"
+          port           = 80
+          v4_cidr_blocks = ["0.0.0.0/0"]
+        },
+        "https" = {
+          protocol       = "TCP"
+          description    = "Allow HTTPS traffic from anywhere"
+          port           = 443
+          v4_cidr_blocks = ["0.0.0.0/0"]
+        }
+      }
+
+      egress_rules = {
+        "all-outbound" = {
+          protocol       = "ANY"
+          description    = "Allow all outbound traffic"
+          v4_cidr_blocks = ["0.0.0.0/0"]
+        }
+      }
+    },
+    "backend" = {
+      name        = "multi-backend-security-group"
+      description = "Backend security group created together with the frontend group"
+      labels = {
+        tier = "backend"
+      }
+
+      ingress_rules = {
+        "postgres" = {
+          protocol       = "TCP"
+          description    = "Allow PostgreSQL from the internal network"
+          port           = 5432
+          v4_cidr_blocks = ["10.0.0.0/8"]
+        },
+        "icmp" = {
+          protocol       = "ICMP"
+          description    = "Allow ICMP from the internal network"
+          v4_cidr_blocks = ["10.0.0.0/8"]
+        },
+        "from-existing-group" = {
+          protocol          = "TCP"
+          description       = "Allow traffic from the group created outside the module"
+          port              = 8080
+          security_group_id = yandex_vpc_security_group.existing.id
+        }
+      }
+
+      egress_rules = {
+        "dns" = {
+          protocol       = "UDP"
+          description    = "Allow DNS queries"
+          port           = 53
+          v4_cidr_blocks = ["8.8.8.8/32", "8.8.4.4/32"]
+        }
+      }
+    }
+  }
+
+  timeouts = {
+    create = "15m"
+    update = "10m"
+    delete = "5m"
+  }
+}

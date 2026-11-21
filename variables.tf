@@ -11,19 +11,19 @@ variable "folder_id" {
 # naming
 #
 variable "blank_name" {
-  description = "Blank name which will be used for the created security group. Ignored when manage_default_security_group or manage_existing_security_group is true."
+  description = "Blank name which will be used for the created security group. Ignored when manage_default_security_group, manage_existing_security_group or security_groups is used."
   type        = string
   default     = null
 }
 
 variable "description" {
-  description = "Description of the security group. Ignored when manage_existing_security_group is true."
+  description = "Description of the security group. Ignored when manage_existing_security_group or security_groups is used."
   type        = string
   default     = ""
 }
 
 variable "labels" {
-  description = "A set of labels. Ignored when manage_existing_security_group is true."
+  description = "A set of labels. Ignored when manage_existing_security_group or security_groups is used."
   type        = map(string)
   default     = {}
 }
@@ -32,7 +32,7 @@ variable "labels" {
 # network
 #
 variable "vpc_id" {
-  description = "VPC ID. Required unless existing_security_group_id or existing_security_group_name is set."
+  description = "VPC ID. Required when the module creates a security group, including groups created through security_groups. Not required when existing_security_group_id or existing_security_group_name is set."
   type        = string
   default     = null
 }
@@ -144,6 +144,61 @@ variable "egress_rules" {
   }
 }
 
+
+variable "security_groups" {
+  description = "Map of security groups to create in a single module call. Each key produces one group with its own ingress and egress rules. When set, vpc_id is required, blank_name, ingress_rules and egress_rules must not be set, and the top-level description and labels are ignored. Mutually exclusive with manage_default_security_group and manage_existing_security_group."
+  type = map(object({
+    name        = string
+    description = optional(string, "")
+    labels      = optional(map(string), {})
+    ingress_rules = optional(map(object({
+      protocol            = string
+      description         = optional(string)
+      labels              = optional(map(string))
+      from_port           = optional(number)
+      to_port             = optional(number)
+      port                = optional(number)
+      security_group_name = optional(string)
+      security_group_id   = optional(string)
+      predefined_target   = optional(string)
+      v4_cidr_blocks      = optional(list(string))
+      v6_cidr_blocks      = optional(list(string))
+    })), {})
+    egress_rules = optional(map(object({
+      protocol            = string
+      description         = optional(string)
+      labels              = optional(map(string))
+      from_port           = optional(number)
+      to_port             = optional(number)
+      port                = optional(number)
+      security_group_name = optional(string)
+      security_group_id   = optional(string)
+      predefined_target   = optional(string)
+      v4_cidr_blocks      = optional(list(string))
+      v6_cidr_blocks      = optional(list(string))
+    })), {})
+  }))
+  default = {}
+
+  validation {
+    condition = length(var.security_groups) == 0 ? true : (
+      !var.manage_default_security_group &&
+      !var.manage_existing_security_group &&
+      var.blank_name == null &&
+      length(var.ingress_rules) == 0 &&
+      length(var.egress_rules) == 0
+    )
+    error_message = "security_groups cannot be combined with manage_default_security_group, manage_existing_security_group, blank_name, or the top-level ingress_rules and egress_rules. Define rules inside each security group instead."
+  }
+
+  validation {
+    condition = alltrue([
+      for group_key, group in var.security_groups :
+      try(group.name != null && group.name != "" && length(group.name) <= 63, false)
+    ])
+    error_message = "Every security group in security_groups must have a non-empty name of at most 63 characters."
+  }
+}
 
 variable "timeouts" {
   description = "Timeout settings for cluster operations"

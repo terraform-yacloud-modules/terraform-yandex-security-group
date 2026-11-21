@@ -32,3 +32,13 @@ output "existing_security_group_ingress_rules" {
   description = "Ingress rules managed on the existing security group"
   value       = module.existing_sg_by_id.ingress_rules
 }
+
+output "multi_security_group_ids" {
+  description = "IDs of the security groups created by a single module call"
+  value       = module.multi_sg.security_group_ids
+}
+
+output "multi_security_group_ingress_rules" {
+  description = "Ingress rules of the security groups created by a single module call"
+  value       = module.multi_sg.security_group_ingress_rules
+}

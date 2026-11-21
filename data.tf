@@ -16,6 +16,24 @@ data "yandex_vpc_security_group" "egress" {
   name      = each.value["security_group_name"]
 }
 
+data "yandex_vpc_security_group" "group_ingress" {
+  for_each = {
+    for k, v in local.multiple_ingress_rules : k => v if v.rule.security_group_name != null
+  }
+
+  folder_id = var.folder_id
+  name      = each.value.rule.security_group_name
+}
+
+data "yandex_vpc_security_group" "group_egress" {
+  for_each = {
+    for k, v in local.multiple_egress_rules : k => v if v.rule.security_group_name != null
+  }
+
+  folder_id = var.folder_id
+  name      = each.value.rule.security_group_name
+}
+
 data "yandex_vpc_security_group" "existing" {
   count = local.manage_existing_security_group ? 1 : 0
 
